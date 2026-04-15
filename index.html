@@ -6,61 +6,142 @@
 <title>3-4 website</title>
 
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-    background:#fff;
-    font-family:'MS PGothic','Arial',sans-serif;
-    margin:20px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.bar { background:#b4d3e6; padding:12px; margin-bottom:20px; }
+body {
+    background: #ffffff;
+    font-family: 'MS PGothic', 'Osaka', 'Arial', sans-serif;
+    margin: 20px;
+    color: #000000;
+    line-height: 1.6;
+}
 
-.bar2 { background:#b4d3e6; padding:5px; margin-bottom:20px; }
+.bar {
+    background: #b4d3e6;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+}
+
+.bar h1 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #003366;
+    display: inline;
+}
+
+.bar p {
+    font-size: 0.9rem;
+    color: #003366;
+    display: inline;
+    margin-left: 10px;
+}
+
+.bar2 {
+    background: #b4d3e6;
+    padding: 4px 10px;
+    margin-bottom: 20px;
+}
 
 .tab-button {
-    background:transparent;
-    border:none;
-    padding:5px 15px;
-    cursor:pointer;
+    background: transparent;
+    border: none;
+    color: #003366;
+    font-size: 0.9rem;
+    padding: 5px 15px;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .tab-button.active {
-    background:#fff;
-    font-weight:bold;
+    background: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
 }
 
-.tab-content { display:none; padding:20px; }
-.tab-content.active { display:block; }
+.tab-content {
+    display: none;
+    background: #ffffff;
+    padding: 20px;
+}
 
-.txt { background:#f5f5f5; padding:10px; margin:10px 0; }
+.tab-content.active {
+    display: block;
+}
 
-/* ボタンリンク */
+.title .main {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #003366;
+    border-bottom: 2px solid #b4d3e6;
+}
+
+.titleEXP, .articleTi {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #003366;
+    margin: 25px 0 10px 0;
+    padding-left: 10px;
+    border-left: 4px solid #b4d3e6;
+}
+
+.txt, .articleTx {
+    font-size: 0.95rem;
+    background: #f5f5f5;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.content-card {
+    background: #f9f9f9;
+    padding: 12px 15px;
+    margin-top: 10px;
+    border-left: 3px solid #b4d3e6;
+}
+
+/* ★ボタン風リンク */
 .link-btn {
-    display:inline-block;
-    background:#b4d3e6;
-    color:#003366;
-    padding:6px 12px;
-    border-radius:6px;
-    text-decoration:none;
-    font-weight:bold;
-    margin-left:10px;
+    display: inline-block;
+    background: #b4d3e6;
+    color: #003366;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 10px;
+    transition: 0.3s;
 }
 
 .link-btn:hover {
-    background:#003366;
-    color:#fff;
+    background: #003366;
+    color: #ffffff;
+}
+
+/* アニメーション */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
 }
 </style>
 </head>
 
 <body>
 
-<div class="bar">
+<div class="bar reveal active">
     <h1>クラスのサイト</h1>
+    <p>~Have enjoy~</p>
 </div>
 
-<div class="bar2">
+<div class="bar2 reveal active">
     <button class="tab-button active" onclick="switchTab(0)">メイン</button>
     <button class="tab-button" onclick="switchTab(1)">お知らせ/記事</button>
     <button class="tab-button" onclick="switchTab(2)">時間割</button>
@@ -69,41 +150,80 @@ body {
 
 <!-- メイン -->
 <div class="tab-content active">
-    <p class="txt">国語:課題〜</p>
+<header class="title reveal active">
+    <h1 class="main">3-4 クラスサイト</h1>
+    <p class="sub">~ Have enjoy ~</p>
+</header>
 
-    <p class="txt">
-        その他:
-        <a href="https://docs.google.com/forms/u/0/d/1lfKVejtwy52skpuiQcuH2qut4EieY7BsHb2srUFW2r0/edit?authuser=0"
-           target="_blank"
-           class="link-btn">
-           ２年間の振り返り
-        </a>
-    </p>
+<h2 class="titleEXP reveal">今日の連絡事項</h2>
+
+<p class="txt reveal">国語:課題は〜〜〜〜</p>
+<p class="txt reveal">数学:課題は〜〜〜〜</p>
+<p class="txt reveal">理科:課題は〜〜〜〜</p>
+<p class="txt reveal">社会:課題は〜〜〜〜</p>
+<p class="txt reveal">英語:課題は〜〜〜〜</p>
+<p class="txt reveal">体育:課題はシャトルラン計画、大縄跳び振り返り</p>
+
+<!-- ★ここだけ変更 -->
+<p class="txt reveal">
+その他:
+<a href="https://docs.google.com/forms/u/0/d/1lfKVejtwy52skpuiQcuH2qut4EieY7BsHb2srUFW2r0/edit?authuser=0"
+   target="_blank"
+   class="link-btn">
+２年間の振り返り
+</a>
+</p>
+
+<h2 class="articleTi reveal">今日の記事</h2>
+<p class="articleTx reveal">
+土曜日は学力推移調査
+</p>
 </div>
 
 <!-- お知らせ -->
 <div class="tab-content">
-    <p>4月18日 学力調査</p>
+<h2>お知らせ/記事</h2>
+<div class="content-card reveal">
+<strong>4月18日（土）</strong> 学力推移調査
+</div>
 </div>
 
 <!-- 時間割 -->
 <div class="tab-content">
-    <p>ここに時間割</p>
+<h2>今週の時間割</h2>
+<div class="content-card reveal">月曜〜土曜</div>
 </div>
 
 <!-- 連絡先 -->
 <div class="tab-content">
-    <p>担任：衣笠先生</p>
+<h2>連絡先</h2>
+<div class="content-card reveal">担任：衣笠先生</div>
 </div>
 
 <script>
-function switchTab(index){
+function switchTab(index) {
     const buttons = document.querySelectorAll('.tab-button');
     const contents = document.querySelectorAll('.tab-content');
 
-    buttons.forEach((b,i)=>b.classList.toggle('active',i===index));
-    contents.forEach((c,i)=>c.classList.toggle('active',i===index));
+    buttons.forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+    });
+
+    contents.forEach((content, i) => {
+        content.classList.toggle('active', i === index);
+    });
 }
+
+/* アニメーション */
+document.addEventListener('DOMContentLoaded', function() {
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            entry.target.classList.toggle('active', entry.isIntersecting);
+        });
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+});
 </script>
 
 </body>

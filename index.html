@@ -6,118 +6,51 @@
 <title>3-4 website</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-    background: #ffffff;
-    font-family: 'MS PGothic', 'Osaka', 'Arial', sans-serif;
-    margin: 20px;
-    color: #000000;
-    line-height: 1.6;
+    background:#fff;
+    font-family:'MS PGothic','Arial',sans-serif;
+    margin:20px;
 }
 
-.bar {
-    background: #b4d3e6;
-    padding: 12px 20px;
-    margin-bottom: 20px;
-}
+.bar { background:#b4d3e6; padding:12px; margin-bottom:20px; }
 
-.bar h1 {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #003366;
-    display: inline;
-}
-
-.bar p {
-    font-size: 0.9rem;
-    color: #003366;
-    display: inline;
-    margin-left: 10px;
-}
-
-.bar2 {
-    background: #b4d3e6;
-    padding: 4px 10px;
-    margin-bottom: 20px;
-}
+.bar2 { background:#b4d3e6; padding:5px; margin-bottom:20px; }
 
 .tab-button {
-    background: transparent;
-    border: none;
-    color: #003366;
-    font-size: 0.9rem;
-    padding: 5px 15px;
-    cursor: pointer;
-    text-decoration: underline;
+    background:transparent;
+    border:none;
+    padding:5px 15px;
+    cursor:pointer;
 }
 
 .tab-button.active {
-    background: #ffffff;
-    font-weight: bold;
-    text-decoration: none;
+    background:#fff;
+    font-weight:bold;
 }
 
-.tab-content {
-    display: none;
-    padding: 20px;
-}
+.tab-content { display:none; padding:20px; }
+.tab-content.active { display:block; }
 
-.tab-content.active {
-    display: block;
-}
+.txt { background:#f5f5f5; padding:10px; margin:10px 0; }
 
-.title .main {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #003366;
-    border-bottom: 2px solid #b4d3e6;
-}
-
-.titleEXP, .articleTi {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #003366;
-    margin: 25px 0 10px;
-    border-left: 4px solid #b4d3e6;
-    padding-left: 10px;
-}
-
-.txt, .articleTx {
-    background: #f5f5f5;
-    padding: 15px;
-    margin: 10px 0;
-}
-
-.content-card {
-    background: #f9f9f9;
-    padding: 12px;
-    margin-top: 10px;
-    border-left: 3px solid #b4d3e6;
-}
-
-/* ★ボタン風リンク */
+/* ボタンリンク */
 .link-btn {
-    display: inline-block;
-    background: #b4d3e6;
-    color: #003366;
-    padding: 6px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    margin-left: 10px;
-    transition: 0.3s;
+    display:inline-block;
+    background:#b4d3e6;
+    color:#003366;
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+    font-weight:bold;
+    margin-left:10px;
 }
 
 .link-btn:hover {
-    background: #003366;
-    color: #ffffff;
+    background:#003366;
+    color:#fff;
 }
-
 </style>
 </head>
 
@@ -125,7 +58,6 @@ body {
 
 <div class="bar">
     <h1>クラスのサイト</h1>
-    <p>~Have enjoy~</p>
 </div>
 
 <div class="bar2">
@@ -137,20 +69,8 @@ body {
 
 <!-- メイン -->
 <div class="tab-content active">
-    <header class="title">
-        <h1 class="main">3-4 クラスサイト</h1>
-    </header>
+    <p class="txt">国語:課題〜</p>
 
-    <h2 class="titleEXP">今日の連絡事項</h2>
-
-    <p class="txt">国語:課題は〜〜〜〜</p>
-    <p class="txt">数学:課題は〜〜〜〜</p>
-    <p class="txt">理科:課題は〜〜〜〜</p>
-    <p class="txt">社会:課題は〜〜〜〜</p>
-    <p class="txt">英語:課題は〜〜〜〜</p>
-    <p class="txt">体育:課題はシャトルラン計画、大縄跳び振り返り</p>
-
-    <!-- ★ここがリンク -->
     <p class="txt">
         その他:
         <a href="https://docs.google.com/forms/u/0/d/1lfKVejtwy52skpuiQcuH2qut4EieY7BsHb2srUFW2r0/edit?authuser=0"
@@ -159,26 +79,30 @@ body {
            ２年間の振り返り
         </a>
     </p>
-
-    <h2 class="articleTi">今日の記事</h2>
-    <p class="articleTx">
-        土曜日は学力推移調査
-    </p>
 </div>
 
-<!-- JS -->
+<!-- お知らせ -->
+<div class="tab-content">
+    <p>4月18日 学力調査</p>
+</div>
+
+<!-- 時間割 -->
+<div class="tab-content">
+    <p>ここに時間割</p>
+</div>
+
+<!-- 連絡先 -->
+<div class="tab-content">
+    <p>担任：衣笠先生</p>
+</div>
+
 <script>
-function switchTab(index) {
+function switchTab(index){
     const buttons = document.querySelectorAll('.tab-button');
     const contents = document.querySelectorAll('.tab-content');
 
-    buttons.forEach((btn, i) => {
-        btn.classList.toggle('active', i === index);
-    });
-
-    contents.forEach((content, i) => {
-        content.classList.toggle('active', i === index);
-    });
+    buttons.forEach((b,i)=>b.classList.toggle('active',i===index));
+    contents.forEach((c,i)=>c.classList.toggle('active',i===index));
 }
 </script>
 

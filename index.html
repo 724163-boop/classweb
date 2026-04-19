@@ -147,6 +147,7 @@ body {
     <button class="tab-button" onclick="switchTab(2)">時間割</button>
     <button class="tab-button" onclick="switchTab(3)">連絡先</button>
     <button class="tab-button" onclick="switchTab(4)">年間予定表</button>
+    <button class="tab-button" onclick="switchTab(5)">報告</button>
 </div>
 
 <!-- メイン -->
@@ -238,6 +239,23 @@ body {
     </div>
 </div>
 
+<div class="tab-content">
+    <h2>すべての問題・不具合の報告</h2>
+    <div class="content-card reveal">
+        <p style="font-size: 1.1rem; margin-bottom: 15px;">
+            サイトの不具合やバグなどの問題を見つけたら、すべてこちらにご連絡ください
+        </p>
+        <p>
+            <strong>メール：</strong>
+            <a href="mailto:724163@kng.ed.jp" class="link-btn">724163@kng.ed.jp</a>
+        </p>
+        <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+            ※対応まで数日かかる場合があります
+            ※githubのissuesでも構いません
+        </p>
+    </div>
+</div>
+    
 <script>
 function switchTab(index) {
     const buttons = document.querySelectorAll('.tab-button');

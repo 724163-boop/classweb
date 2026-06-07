@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>AI管理画面</h2>
+
+<select id="mode">
+  <option value="partial">
+    お知らせ更新
+  </option>
+
+  <option value="full">
+    サイト全体更新(危険)
+  </option>
+</select>
+
+<br><br>
+
+<textarea
+ id="prompt"
+ rows="10"
+ cols="60">
+</textarea>
+
+<br><br>
+
+<button onclick="send()">
+送信
+</button>
+
+<script>
+
+async function send(){
+
+ const mode =
+  document.getElementById("mode").value;
+
+ if(mode==="full"){
+
+   if(
+     !confirm(
+`警告
+
+サイト全体を書き換えます。
+
+AIの暴走で
+ページが破損する可能性があります。`
+     )
+   ){
+      return;
+   }
+ }
+
+ await fetch(
+   "https://RENDER.onrender.com/update",
+   {
+     method:"POST",
+     headers:{
+       "Content-Type":"application/json"
+     },
+     body:JSON.stringify({
+       mode,
+       prompt:
+        document.getElementById("prompt").value
+     })
+   }
+ );
+
+ alert("更新要求送信");
+}
+
+</script>
+
+</body>
+</html>

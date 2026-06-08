@@ -1,67 +1,93 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ClassWeb AI Admin</title>
-
+<html>
 <style>
+    *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
 body{
     background:#000;
     color:#00ff41;
-    font-family:Consolas,Monaco,monospace;
+    font-family:Consolas, Monaco, "Courier New", monospace;
     min-height:100vh;
-    margin:0;
     padding:20px;
 }
 
 .terminal-window{
     width:100%;
     max-width:1200px;
-    margin:auto;
+    margin:0 auto;
     background:#000;
     border:1px solid #00ff41;
-    border-radius:8px;
+    border-radius:10px;
     overflow:hidden;
+
     box-shadow:
-        0 0 10px rgba(0,255,65,.2),
-        0 0 40px rgba(0,255,65,.1);
+        0 0 10px rgba(0,255,65,0.2),
+        0 0 30px rgba(0,255,65,0.1);
 }
 
 .terminal-header{
     background:#111;
-    padding:8px 12px;
     border-bottom:1px solid #00ff41;
+    padding:10px 15px;
 }
 
 .terminal-title{
     color:#00ff41;
+    font-weight:bold;
+    font-size:14px;
+    letter-spacing:1px;
 }
 
 #output{
-    height:500px;
+    height:600px;
     overflow-y:auto;
     padding:15px;
     white-space:pre-wrap;
-    line-height:1.5;
+    line-height:1.6;
+    font-size:15px;
+}
+
+#output::-webkit-scrollbar{
+    width:8px;
+}
+
+#output::-webkit-scrollbar-track{
+    background:#111;
+}
+
+#output::-webkit-scrollbar-thumb{
+    background:#00ff41;
 }
 
 .input-line{
     display:flex;
-    padding:10px;
+    align-items:center;
+
     border-top:1px solid #00ff41;
+
+    padding:12px 15px;
+
+    background:#050505;
 }
 
 .prompt{
     color:#00ff41;
     margin-right:8px;
+    font-weight:bold;
+    white-space:nowrap;
 }
 
 #command{
     flex:1;
+
     background:transparent;
     border:none;
+
     color:#00ff41;
+
     font-family:inherit;
     font-size:15px;
 }
@@ -69,13 +95,64 @@ body{
 #command:focus{
     outline:none;
 }
+
+#command::placeholder{
+    color:#008f2a;
+}
+
+/* 点滅カーソル風 */
+
+.cursor{
+    display:inline-block;
+    width:8px;
+    height:16px;
+    background:#00ff41;
+    animation:blink 1s infinite;
+}
+
+@keyframes blink{
+    0%{
+        opacity:1;
+    }
+    50%{
+        opacity:0;
+    }
+    100%{
+        opacity:1;
+    }
+}
+
+/* スマホ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    #output{
+        height:450px;
+        font-size:13px;
+    }
+
+    .prompt{
+        font-size:12px;
+    }
+
+    #command{
+        font-size:13px;
+    }
+}
 </style>
-</head>
+<div class="terminal-window">
 
-<body>
+    <div class="terminal-header">
+        <div class="terminal-title">
+            ClassWeb Administration Console
+        </div>
+    </div>
 
-<div id="terminal">
-
+    <div id="output">
 ClassWeb Administration Console
 Version 1.0
 
@@ -91,112 +168,278 @@ help
 status
 mode partial
 mode full
-password <password>
-update <instruction>
+password &lt;password&gt;
+update &lt;instruction&gt;
 clear
 
 ------------------------------------------------
 
+Current Mode : partial
+
 classweb@admin:~$
+    </div>
+
+    <div class="input-line">
+
+        <span class="prompt">
+            classweb@admin:~$
+        </span>
+
+        <input
+            id="command"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+            autofocus
+            placeholder="Type command...">
+
+    </div>
 
 </div>
+<scriot>
+    const output = document.getElementById("output");
+const commandInput = document.getElementById("command");
 
-<script>
+let currentMode = "partial";
+let savedPassword = "";
 
-async function sendUpdate(){
+let history = [];
+let historyIndex = -1;
 
-    const password =
-        document.getElementById("password").value;
+function print(text = "") {
+    output.innerHTML += "\n" + text;
+    output.scrollTop = output.scrollHeight;
+}
 
-    const mode =
-        document.getElementById("mode").value;
+function printPrompt() {
+    print("\nclassweb@admin:~$ ");
+}
 
-    const prompt =
-        document.getElementById("prompt").value;
+async function sendUpdate(promptText) {
 
-    if(!password){
-        alert("パスワードを入力してください");
+    if (!savedPassword) {
+        print("ERROR: Password not set");
+        print("Use:");
+        print("password <your_password>");
         return;
     }
 
-    if(!prompt.trim()){
-        alert("AIへの指示を入力してください");
+    if (
+        currentMode === "full" &&
+        !confirm(
+            "WARNING\n\n" +
+            "Full mode can modify the entire website.\n\n" +
+            "Continue?"
+        )
+    ) {
+        print("Operation cancelled.");
         return;
     }
 
-    if(mode === "full"){
+    print("Connecting to Render...");
+    print("Sending update request...");
 
-        const ok = confirm(
-`警告
-
-サイト全体を書き換えます。
-
-AIの誤動作により
-HTML・CSS・JavaScriptが破損する可能性があります。
-
-続行しますか？`
-        );
-
-        if(!ok){
-            return;
-        }
-    }
-
-    const btn =
-        document.getElementById("sendBtn");
-
-    const status =
-        document.getElementById("status");
-
-    btn.disabled = true;
-
-    status.textContent =
-        "更新要求送信中...";
-
-    try{
+    try {
 
         const response = await fetch(
             "https://classweb-ai-server.onrender.com/update",
             {
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                body:JSON.stringify({
-                    password,
-                    mode,
-                    prompt
+                body: JSON.stringify({
+                    password: savedPassword,
+                    mode: currentMode,
+                    prompt: promptText
                 })
             }
         );
 
-        const result =
-            await response.json();
+        const result = await response.json();
 
-        if(response.ok){
+        if (response.ok) {
 
-            status.textContent =
-                "✅ 更新要求を送信しました\n\n" +
-                JSON.stringify(result,null,2);
+            print("");
+            print("[SUCCESS]");
+            print(JSON.stringify(result, null, 2));
 
-        }else{
+        } else {
 
-            status.textContent =
-                "❌ エラー\n\n" +
-                JSON.stringify(result,null,2);
+            print("");
+            print("[ERROR]");
+            print(JSON.stringify(result, null, 2));
+
         }
 
-    }catch(error){
+    } catch (err) {
 
-        status.textContent =
-            "❌ 通信エラー\n\n" +
-            error.message;
+        print("");
+        print("[NETWORK ERROR]");
+        print(err.message);
+
     }
-
-    btn.disabled = false;
 }
 
-</script>
+function executeCommand(command) {
 
-</body>
-</html>
+    command = command.trim();
+
+    if (!command) {
+        return;
+    }
+
+    print("classweb@admin:~$ " + command);
+
+    const lower = command.toLowerCase();
+
+    if (lower === "help") {
+
+        print("");
+        print("Available Commands");
+        print("------------------");
+        print("help");
+        print("status");
+        print("mode partial");
+        print("mode full");
+        print("password <password>");
+        print("update <instruction>");
+        print("clear");
+
+        return;
+    }
+
+    if (lower === "status") {
+
+        print("");
+        print("System Status");
+        print("------------------");
+        print("Server: configured");
+        print("Mode: " + currentMode);
+        print(
+            "Password: " +
+            (savedPassword ? "loaded" : "not set")
+        );
+
+        return;
+    }
+
+    if (lower === "clear") {
+
+        output.innerHTML = "";
+        return;
+    }
+
+    if (lower === "mode partial") {
+
+        currentMode = "partial";
+
+        print("");
+        print("Mode changed to partial");
+
+        return;
+    }
+
+    if (lower === "mode full") {
+
+        currentMode = "full";
+
+        print("");
+        print("WARNING");
+        print("Full mode enabled");
+        print("AI may rewrite the entire website");
+
+        return;
+    }
+
+    if (lower.startsWith("password ")) {
+
+        savedPassword =
+            command.substring(9).trim();
+
+        print("");
+        print("Password stored in session");
+
+        return;
+    }
+
+    if (lower.startsWith("update ")) {
+
+        const promptText =
+            command.substring(7).trim();
+
+        if (!promptText) {
+
+            print("");
+            print("Usage:");
+            print("update <instruction>");
+
+            return;
+        }
+
+        sendUpdate(promptText);
+
+        return;
+    }
+
+    print("");
+    print("Unknown command");
+    print("Type 'help' for available commands");
+}
+
+commandInput.addEventListener(
+    "keydown",
+    function (e) {
+
+        if (e.key === "Enter") {
+
+            const cmd = commandInput.value;
+
+            history.push(cmd);
+            historyIndex = history.length;
+
+            executeCommand(cmd);
+
+            commandInput.value = "";
+        }
+
+        if (e.key === "ArrowUp") {
+
+            e.preventDefault();
+
+            if (historyIndex > 0) {
+
+                historyIndex--;
+
+                commandInput.value =
+                    history[historyIndex];
+            }
+        }
+
+        if (e.key === "ArrowDown") {
+
+            e.preventDefault();
+
+            if (
+                historyIndex <
+                history.length - 1
+            ) {
+
+                historyIndex++;
+
+                commandInput.value =
+                    history[historyIndex];
+
+            } else {
+
+                historyIndex =
+                    history.length;
+
+                commandInput.value = "";
+            }
+        }
+    }
+);
+
+commandInput.focus();
+</scriot>
